@@ -96,13 +96,11 @@
            (lookup-varo x env addr)
            (eval-left-to-right-expo e env store-in addr-in store^ addr^ v)))
 
-        #|
         ((fresh (a d v-a v-d store^ addr^)
            (== `(cons ,a ,d) exp)
            (== `(,v-a . ,v-d) val)
            (eval-left-to-right-expo a env store-in addr-in store^ addr^ v-a)
            (eval-left-to-right-expo d env store^ addr^ store-out addr-out v-d)))
-        |#
         
         ((fresh (rator rand x body env^ v store^ store^^ addr^ addr^^ new-env new-store new-addr)
            (== `(,rator ,rand) exp)
@@ -165,7 +163,6 @@
            (lookup-varo x env addr)
            (eval-right-to-left-expo e env store-in addr-in store^ addr^ v)))
 
-        #|
         ((fresh (a d v-a v-d store^ addr^)
            (== `(cons ,a ,d) exp)
            (== `(,v-a . ,v-d) val)
@@ -173,7 +170,6 @@
            ;; even though store-in is fed into the d evaluation
            (eval-right-to-left-expo d env store-in addr^ store^ addr-out v-d)
            (eval-right-to-left-expo a env store^ addr-in store-out addr^ v-a)))
-        |#
         
         ((fresh (rator rand x body env^ v store^ store^^ addr^ addr^^ new-env new-store new-addr)
            (== `(,rator ,rand) exp)
