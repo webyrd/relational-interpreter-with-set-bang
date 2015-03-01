@@ -38,6 +38,23 @@ running stats for (run 1 (expr) (eval-left-to-righto expr '(you)) (eval-right-to
 Find a program that evaluates to either `(I love you)` or `(I love lamp)`:
 
 ```
+> (time (run 1 (expr)
+          (eval-left-to-righto expr '(I love you))
+          (eval-right-to-lefto expr '(I love lamp))))
+running stats for (run 1 (expr) (eval-left-to-righto expr '(I love you)) (eval-right-to-lefto expr '(I love lamp))):
+    126 collections
+    16624 ms elapsed cpu time, including 272 ms collecting
+    16673 ms elapsed real time, including 273 ms collecting
+    1061261424 bytes allocated
+((((lambda (_.0)
+     (cons 'I
+       (cons 'love
+         (cons _.0 ((lambda (_.1) '()) (set! _.0 'lamp))))))
+    'you)
+   (=/= ((_.0 void)) ((_.1 void))) (sym _.0 _.1)))
+```
+
+```
 > (time (run 1 (full-expr)
           (fresh (tricky-expr left-tricky-value right-tricky-value context-expr full-value)
             (== '(you) left-tricky-value)
