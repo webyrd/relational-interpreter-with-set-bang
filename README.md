@@ -9,7 +9,7 @@ Interesting queries, under Vicare Scheme:
 
 Find a program that evaluates to different values under left-to-right and right-to-left evaluation:
 
-``
+```
 > (load "interp-curried-two-directions-no-shadowing.scm")
 > (time (run 1 (expr v1 v2)
           (=/= v1 v2)
