@@ -15,6 +15,16 @@ Find a program that evaluates to different values under left-to-right and right-
           (=/= v1 v2)
           (eval-left-to-righto expr v1)
           (eval-right-to-lefto expr v2)))
+running stats for (run 1 (expr v1 v2) (=/= v1 v2) (eval-left-to-righto expr v1) (eval-right-to-lefto expr v2)):
+    4 collections
+    230 ms elapsed cpu time, including 1 ms collecting
+    231 ms elapsed real time, including 1 ms collecting
+    33265328 bytes allocated
+(((((lambda (_.0) (cons _.0 (set! _.0 '_.1))) '_.2)
+    (_.2 . void) (_.1 . void))
+   (=/= ((_.0 void)) ((_.1 _.2))) (sym _.0)
+   (absento (closure _.1) (closure _.2) (void _.1)
+     (void _.2))))	  
 ```
 
 Find a program that evaluates to either `(you)` or `(lamp)`:
@@ -26,9 +36,9 @@ Find a program that evaluates to either `(you)` or `(lamp)`:
           (eval-right-to-lefto expr '(lamp))))
 running stats for (run 1 (expr) (eval-left-to-righto expr '(you)) (eval-right-to-lefto expr '(lamp))):
     8 collections
-    953 ms elapsed cpu time, including 5 ms collecting
-    955 ms elapsed real time, including 5 ms collecting
-    67419856 bytes allocated
+    898 ms elapsed cpu time, including 11 ms collecting
+    898 ms elapsed real time, including 11 ms collecting
+    67423920 bytes allocated
 ((((lambda (_.0)
      (cons _.0 ((lambda (_.1) '()) (set! _.0 'lamp))))
     'you)
@@ -54,6 +64,8 @@ running stats for (run 1 (expr) (eval-left-to-righto expr '(I love you)) (eval-r
    (=/= ((_.0 void)) ((_.1 void))) (sym _.0 _.1)))
 ```
 
+Or this version of the query, which re-uses inference of the "tricky" `(you)` vs. `(lamp)` subexpressions:
+
 ```
 > (time (run 1 (full-expr)
           (fresh (tricky-expr left-tricky-value right-tricky-value context-expr full-value)
@@ -65,15 +77,13 @@ running stats for (run 1 (expr) (eval-left-to-righto expr '(I love you)) (eval-r
             (eval-left-to-righto full-expr `(I love . ,left-tricky-value))
             (eval-right-to-lefto full-expr `(I love . ,right-tricky-value)))))
 running stats for (run 1 (full-expr) (fresh (tricky-expr left-tricky-value right-tricky-value context-expr full-value) (== '(you) left-tricky-value) (== '(lamp) right-tricky-value) (eval-left-to-righto tricky-expr left-tricky-value) (eval-right-to-lefto tricky-expr right-tricky-value) (== `((lambda (tricky-expr) ,context-expr) ,tricky-expr) full-expr) (eval-left-to-righto full-expr `(I love unquote left-tricky-value)) (eval-right-to-lefto full-expr `(I love unquote right-tricky-value)))):
-    24 collections
-    19381 ms elapsed cpu time, including 21 ms collecting
-    19381 ms elapsed real time, including 21 ms collecting
-    203419584 bytes allocated
+    10 collections
+    1263 ms elapsed cpu time, including 6 ms collecting
+    1264 ms elapsed real time, including 6 ms collecting
+    76016400 bytes allocated
 ((((lambda (tricky-expr) (cons 'I (cons 'love tricky-expr)))
     ((lambda (_.0)
        (cons _.0 ((lambda (_.1) '()) (set! _.0 'lamp))))
       'you))
-   (=/= ((_.0 cons)) ((_.0 lambda)) ((_.0 quote))
-     ((_.0 set!)) ((_.0 void)) ((_.1 quote)) ((_.1 void)))
-   (sym _.0 _.1)))
+   (=/= ((_.0 void)) ((_.1 void))) (sym _.0 _.1)))
 ```
